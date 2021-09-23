@@ -69,9 +69,6 @@ export default {
     TablePagination,
   },
   props: {
-    apiConfig: {
-      required: true,
-    },
     apiUrl: {
       type: String,
       required: true,

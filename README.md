@@ -7,8 +7,8 @@
 
 ## API
 
-Required props:
-- apiConfig: axios instance file
+### Required props
+
 - apiUrl: api endpoint
 - columns: array of columns to display in the table
 
@@ -33,16 +33,17 @@ exemple of status object (from enums):
 }
 ```
 
-Optional props: options object, with following keys:
+### Optional props: options object, with following keys
+
 - perPage: number of lines displayed per page
 - filterButtons: array of filters selectable (displayed on the top of the table)
 - defaultFilters: object of filters set until reset
 - permanentFilters: object of filters set for every request
 - onRowClicked: target component if a row is clicked
 
-## TODO
+## Todo
 
 - add sorting
 - add defaultFilters
-- save params in localstorage
+- save params in localstorage : https://fr.vuejs.org/v2/cookbook/client-side-storage.html
 - add bootstrap compatibility
