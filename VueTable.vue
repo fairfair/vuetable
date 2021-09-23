@@ -13,8 +13,16 @@
             <thead class="bg-gray-50">
             <tr>
               <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pt-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <div class="px-1">
-                  {{ column.name }}
+                <div class="flex justify-between cursor-pointer" @click="submitSort(column)">
+                  <div class="mx-1">
+                    <span class="inline-block align-middle">{{ column.name }}</span>
+                  </div>
+                  <svg v-show="orderBy === 'ASC' && sortBy === column.field" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                  </svg>
+                  <svg v-show="orderBy === 'DESC' && sortBy === column.field" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                 </div>
               </th>
             </tr>
@@ -22,12 +30,12 @@
               <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pb-3 text-left text-xs font-medium tracking-wider">
                 <div class="mt-1" v-if="column.searchField">
                   <label :for="column.field" class="sr-only">{{ column.name }}</label>
-                  <input @keyup.enter="submitSearch(column, $event.target.value)" :id="column.field" type="text" :name="column.field" class="py-1 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" :placeholder="column.name" />
+                  <input @keyup.enter="submitSearch(column, $event.target.value)" :id="column.field" type="text" :name="column.field" class="py-1 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Rechercher" />
                 </div>
               </th>
             </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <tbody class="bg-white divide-y divide-gray-200" v-if="lines.length > 0">
             <tr v-for="line in lines" :key="line.id" @click="redirect(line.order_id)" class="cursor-pointer hover:bg-indigo-50">
               <td v-for="column in columns" :key="column.id" class="px-6 py-4 whitespace-nowrap">
                 <div v-if="column.kind === 'text'" class="text-gray-900">
@@ -43,6 +51,13 @@
                 <div v-if="column.kind === 'date'" class="text-gray-900">
                   {{ getDate(line[column.field]) }}
                 </div>
+              </td>
+            </tr>
+            </tbody>
+            <tbody v-else>
+            <tr>
+              <td :colspan="columns.length" class="p-3 text-center">
+                <span class="">Aucun résultat</span>
               </td>
             </tr>
             </tbody>
@@ -77,6 +92,10 @@ export default {
       type: Array,
       required: true,
     },
+    sortByDefault: {
+      type: String,
+      required: true,
+    },
     options: {
       type: Object,
       required: false,
@@ -87,6 +106,8 @@ export default {
       loading: false,
       lines: [],
       filters: {},
+      orderBy: null,
+      sortBy: null,
       pagination: {
         currentPage: 1,
         from: 0,
@@ -97,6 +118,7 @@ export default {
     };
   },
   async mounted() {
+    this.reset();
     // fetch from localStorage ?
 
     // todo : add this.options.defaultFilters
@@ -110,8 +132,8 @@ export default {
       // todo: save filters & currentPage in localstorage
 
       const defaultParams = {
-        sortBy: 'order_id',
-        orderBy: 'DESC',
+        sortBy: this.sortBy,
+        orderBy: this.orderBy,
         per_page: this.options.perPage !== undefined ? this.options.perPage : 20,
         page: this.pagination.currentPage,
       };
@@ -186,16 +208,27 @@ export default {
       this.fetch();
     },
 
+    submitSort(column) {
+      this.sortBy = column.field;
+      if (this.orderBy === 'ASC') {
+        this.orderBy = 'DESC';
+      } else {
+        this.orderBy = 'ASC';
+      }
+      this.fetch();
+    },
+
     navigate(to) {
       this.pagination.currentPage = to;
       this.fetch();
     },
 
-    resetTable() {
+    reset() {
       this.filters = {};
+      this.sortBy = this.sortByDefault;
+      this.orderBy = this.options.orderBy !== undefined ? this.options.orderBy : 'DESC';
       this.pagination.currentPage = 1;
       this.fetch();
-      this.$emit('resetTable');
     },
 
     redirect(id) {

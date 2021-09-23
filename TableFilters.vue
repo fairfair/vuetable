@@ -98,7 +98,7 @@ export default {
         this.filters[i].active = false;
       });
       // reset table
-      this.$parent.resetTable();
+      this.$parent.reset();
     },
   },
 }
