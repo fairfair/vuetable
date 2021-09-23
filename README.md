@@ -26,11 +26,11 @@ exemple of column object:
     field: 'order_status', // database field name
     kind: 'label', // also available : id, text & date
     searchField: true,
-    enums: JSON.stringify(enums.ORDER_STATUS),
+    enums: enums.ORDER_STATUS, // optionnal, used for labelled items
 }
 ```
 
-exemple of status object, for labelled items (store in enums in above example):
+exemple of labelled item object:
 ```
 {
     name: 'A proposer',
@@ -45,10 +45,10 @@ exemple of status object, for labelled items (store in enums in above example):
 - perPage: number of lines displayed per page
 - orderBy : only value accepted is 'ASC' (default 'DESC')
 - sortBy : field to sort data
-- filterButtons: array of filters selectable (displayed on the top of the table), see status object above
-- defaultFilters: object of filters set until reset
-- permanentFilters: object of filters set for every request
-- onRowClicked: target component if a row is clicked
+- filterButtons: array of filters clickable, see labelled item above
+- defaultFilters: object of filters set until reset, see api doc for syntax
+- permanentFilters: object of filters set for every request, see api doc for syntax
+- onRowClicked: target component name if a row is clicked
 
 ## Todo
 

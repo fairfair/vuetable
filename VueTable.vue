@@ -248,12 +248,12 @@ export default {
     // DISPLAY METHODS
 
     showLabelContent(val, arr) {
-      const obj = JSON.parse(arr).find((i) => i.value === parseInt(val, 10));
+      const obj = arr.find((i) => i.value === parseInt(val, 10));
       return (obj) ? obj.name : 'NR';
     },
 
     showLabelColor(val, arr) {
-      const obj = JSON.parse(arr).find((i) => i.value === parseInt(val, 10));
+      const obj = arr.find((i) => i.value === parseInt(val, 10));
       return (obj) ? obj.color : 'gray';
     },
 
