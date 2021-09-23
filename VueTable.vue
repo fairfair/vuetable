@@ -2,8 +2,8 @@
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <table-filters
-          ref="filterComponent"
-          :options="options"
+        ref="filterComponent"
+        :filterButtons="options.filterButtons"
       ></table-filters>
     </div>
     <div class="overflow-x-auto py-2">
@@ -14,15 +14,15 @@
             <tr>
               <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pt-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <div class="px-1">
-                  {{ column.title }}
+                  {{ column.name }}
                 </div>
               </th>
             </tr>
             <tr>
               <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pb-3 text-left text-xs font-medium tracking-wider">
                 <div class="mt-1" v-if="column.searchField">
-                  <label for="email" class="sr-only">{{ column.title }}</label>
-                  <input @keyup.enter="submitSearch(column.name, $event.target.value)" type="text" :name="column.name" class="py-1 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" :placeholder="column.title" />
+                  <label :for="column.field" class="sr-only">{{ column.name }}</label>
+                  <input @keyup.enter="submitSearch(column, $event.target.value)" :id="column.field" type="text" :name="column.field" class="py-1 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" :placeholder="column.name" />
                 </div>
               </th>
             </tr>
@@ -31,17 +31,17 @@
             <tr v-for="line in lines" :key="line.id" @click="redirect(line.order_id)" class="cursor-pointer hover:bg-indigo-50">
               <td v-for="column in columns" :key="column.id" class="px-6 py-4 whitespace-nowrap">
                 <div v-if="column.kind === 'text'" class="text-gray-900">
-                  {{ line[column.name] }}
+                  {{ line[column.field] }}
                 </div>
 
                 <div v-if="column.kind === 'label'">
-                  <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-${showLabelLevel(line[column.name], column.enums)}-100 text-${showLabelLevel(line[column.name], column.enums)}-800`">
-                   {{ showLabelContent(line[column.name], column.enums) }}
+                  <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-${showLabelColor(line[column.field], column.enums)}-100 text-${showLabelColor(line[column.field], column.enums)}-800`">
+                   {{ showLabelContent(line[column.field], column.enums) }}
                   </span>
                 </div>
 
                 <div v-if="column.kind === 'date'" class="text-gray-900">
-                  {{ getDate(line[column.name]) }}
+                  {{ getDate(line[column.field]) }}
                 </div>
               </td>
             </tr>
@@ -80,28 +80,22 @@ export default {
       type: Array,
       required: true,
     },
-    perPage: {
-      type: Number,
-      default: 20,
-    },
     options: {
       type: Object,
-      required: true,
+      required: false,
     },
   },
   data() {
     return {
       loading: false,
       lines: [],
-      filters: {
-        prescriber_id: 1,
-      },
+      filters: {},
       pagination: {
         currentPage: 1,
         from: 0,
         to: 0,
         total: 0,
-        lastPage: 10,
+        lastPage: 1,
       },
     };
   },
@@ -117,31 +111,34 @@ export default {
       this.loading = true;
 
       // todo: save filters & currentPage in localstorage
-      const prescriberKey = encodeURI('prescriber_id[eq]');
-      const res = await this.$http.get(this.apiUrl, {
-        params: {
-          sortBy: 'order_id',
-          orderBy: 'DESC',
-          per_page: this.perPage,
-          page: this.pagination.currentPage,
-          [prescriberKey]: 1,
-          // 'referent_id[eq]': 1,
-        },
+
+      const defaultParams = {
+        sortBy: 'order_id',
+        orderBy: 'DESC',
+        per_page: this.options.perPage !== undefined ? this.options.perPage : 20,
+        page: this.pagination.currentPage,
+      };
+
+      const filtersParams = this.options.permanentFilters
+        ? { ...this.options.permanentFilters, ...this.filters }
+        : this.filters;
+
+      const params = new URLSearchParams();
+      Object.keys(defaultParams).forEach((key) => {
+        params.append(key, defaultParams[key]);
       });
 
-      //         data: this.options.permanentFilters
-      //  ? { ...this.options.permanentFilters, ...this.filters }
-      //  : this.filters,
+      Object.keys(filtersParams).forEach((key) => {
+        const values = filtersParams[key].toString().split(',');
+        values.forEach((value) => {
+          params.append(key, value);
+        });
+      });
+
+      const res = await this.$http.get(this.apiUrl, { params });
 
       if (res) {
-        const lines = res.data.data;
-
-        if (this.options.computedFields !== undefined) {
-          this.lines = lines.map((line) => this.options.computedFields.order(line));
-        } else {
-          this.lines = lines;
-        }
-
+        this.lines = res.data.data;
         this.pagination = {
           currentPage: res.data.current_page,
           from: res.data.from,
@@ -154,14 +151,39 @@ export default {
       this.loading = false;
     },
 
-    submitSearch(payload) {
-      // used in column search inputs
-
-      // todo
-      if (payload.value !== '') {
-        this.filters[payload.field] = payload.value;
+    addFilter(field, value, query) {
+      const key = `${field}[${query}]`;
+      if (key in this.filters) {
+        this.filters[key] += `,${value}`;
       } else {
-        delete this.filters[payload.field];
+        this.filters[key] = value;
+      }
+    },
+
+    removeFilter(field, value, query) {
+      const key = `${field}[${query}]`;
+      if (key in this.filters) {
+        const values = this.filters[key].toString().split(',');
+        const newValues = [];
+        if (values.length > 1) {
+          values.forEach((filter) => {
+            if (filter !== value.toString()) {
+              newValues.push(filter);
+            }
+          });
+          this.filters[key] = newValues.join();
+        } else {
+          delete this.filters[key];
+        }
+      }
+    },
+
+    // used in column search inputs
+    submitSearch(column, value) {
+      const query = (column.kind === 'id') ? 'eq' : 'contains';
+      this.removeFilter(column.field, value, query);
+      if (value !== '') {
+        this.addFilter(column.field, value, query);
       }
 
       this.fetch();
@@ -180,24 +202,26 @@ export default {
     },
 
     redirect(id) {
-      this.$router.push({ name: this.options.onRowClicked, params: { id } });
+      if (this.options.onRowClicked !== undefined) {
+        this.$router.push({ name: this.options.onRowClicked, params: { id } });
+      }
     },
 
     // DISPLAY METHODS
 
     showLabelContent(val, arr) {
       const obj = JSON.parse(arr).find((i) => i.value === parseInt(val, 10));
-      return (obj) ? obj.text : 'Devis refusé';
+      return (obj) ? obj.name : 'NR';
     },
 
-    showLabelLevel(val, arr) {
+    showLabelColor(val, arr) {
       const obj = JSON.parse(arr).find((i) => i.value === parseInt(val, 10));
-      return (obj) ? obj.level : 'gray';
+      return (obj) ? obj.color : 'gray';
     },
 
     getDate(value) {
       if (value) {
-        const date = DateTime.fromSQL(value, { zone: 'utc' }).setZone('Europe/Paris');
+        const date = DateTime.fromISO(value, { zone: 'utc' }).setZone('Europe/Paris');
         return date.toLocaleString(DateTime.DATETIME_MED);
       }
       return '';

@@ -18,7 +18,7 @@
           {{ ' ' }}
           à
           {{ ' ' }}
-          <span class="font-medium">{{ pagination.to - 1 }}</span>
+          <span class="font-medium">{{ pagination.to }}</span>
           {{ ' ' }}
           des
           {{ ' ' }}
@@ -31,7 +31,7 @@
         <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
           <a href="#" @click="previous" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
             <span class="sr-only">Précédent</span>
-            <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           </a>
           <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
           <a href="#" @click="previous" v-show="pagination.currentPage > 1" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
@@ -45,7 +45,7 @@
           </a>
           <a href="#" @click="next" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
             <span class="sr-only">Suivant</span>
-            <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
           </a>
         </nav>
       </div>
@@ -54,22 +54,22 @@
 </template>
 
 <script>
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/solid';
+// import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/solid';
 
 export default {
-  components: {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-  },
   props: {
     pagination: Object,
   },
   methods: {
     previous() {
-      this.$parent.navigate(this.pagination.currentPage - 1);
+      if (this.pagination.currentPage > 1) {
+        this.$parent.navigate(this.pagination.currentPage - 1);
+      }
     },
     next() {
-      this.$parent.navigate(this.pagination.currentPage + 1);
+      if (this.pagination.currentPage < this.pagination.lastPage) {
+        this.$parent.navigate(this.pagination.currentPage + 1);
+      }
     },
   },
 }
