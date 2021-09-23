@@ -1,17 +1,23 @@
 # VueTable Component
 
-## Config
+## Requirements
 
 - Vue 2
 - Tailwindcss
+- Use axios with global instance called $http
 
 ## API
+
+### Default values
+
+- perPage : 20
+- sortBy : first columnn
+- orderBy : DESC
 
 ### Required props
 
 - apiUrl: api endpoint
 - columns: array of columns to display in the table
-- sortBy: column used to sort data by (usually id)
 
 exemple of column object:
 ```
@@ -24,7 +30,7 @@ exemple of column object:
 }
 ```
 
-exemple of status object (from enums):
+exemple of status object, for labelled items (store in enums in above example):
 ```
 {
     name: 'A proposer',
@@ -37,14 +43,14 @@ exemple of status object (from enums):
 ### Optional props: options object, with following keys
 
 - perPage: number of lines displayed per page
-- orderByDefault : order by ASC (default DESC)
-- filterButtons: array of filters selectable (displayed on the top of the table)
+- orderBy : only value accepted is 'ASC' (default 'DESC')
+- sortBy : field to sort data
+- filterButtons: array of filters selectable (displayed on the top of the table), see status object above
 - defaultFilters: object of filters set until reset
 - permanentFilters: object of filters set for every request
 - onRowClicked: target component if a row is clicked
 
 ## Todo
 
-- add defaultFilters
-- save params in localstorage : https://fr.vuejs.org/v2/cookbook/client-side-storage.html
+- refresh ui according to localstorage config
 - add bootstrap compatibility

@@ -92,10 +92,6 @@ export default {
       type: Array,
       required: true,
     },
-    sortByDefault: {
-      type: String,
-      required: true,
-    },
     options: {
       type: Object,
       required: false,
@@ -108,6 +104,7 @@ export default {
       filters: {},
       orderBy: null,
       sortBy: null,
+      perPage: null,
       pagination: {
         currentPage: 1,
         from: 0,
@@ -118,27 +115,38 @@ export default {
     };
   },
   async mounted() {
+    // actually set all params
     this.reset();
-    // fetch from localStorage ?
 
-    // todo : add this.options.defaultFilters
+    // if localStorage : fetch it
+    if (localStorage.filters || localStorage.sortBy || localStorage.orderBy) {
+      if (localStorage.filters) this.filters = JSON.parse(localStorage.filters);
+      if (localStorage.sortBy) this.sortBy = localStorage.sortBy;
+      if (localStorage.orderBy) this.orderBy = localStorage.orderBy;
+    } else if (this.options.defaultFilters !== undefined) {
+      this.filters = this.options.defaultFilters;
+    }
 
     await this.fetch();
   },
+
   methods: {
     async fetch() {
       this.loading = true;
 
-      // todo: save filters & currentPage in localstorage
+      // save params in localstorage
+      localStorage.setItem('filters', JSON.stringify(this.filters));
+      localStorage.setItem('sortBy', this.sortBy);
+      localStorage.setItem('orderBy', this.orderBy);
 
       const defaultParams = {
         sortBy: this.sortBy,
         orderBy: this.orderBy,
-        per_page: this.options.perPage !== undefined ? this.options.perPage : 20,
+        per_page: this.perPage,
         page: this.pagination.currentPage,
       };
 
-      const filtersParams = this.options.permanentFilters
+      const filters = this.options.permanentFilters
         ? { ...this.options.permanentFilters, ...this.filters }
         : this.filters;
 
@@ -147,8 +155,8 @@ export default {
         params.append(key, defaultParams[key]);
       });
 
-      Object.keys(filtersParams).forEach((key) => {
-        const values = filtersParams[key].toString().split(',');
+      Object.keys(filters).forEach((key) => {
+        const values = filters[key].toString().split(',');
         values.forEach((value) => {
           params.append(key, value);
         });
@@ -225,10 +233,10 @@ export default {
 
     reset() {
       this.filters = {};
-      this.sortBy = this.sortByDefault;
+      this.sortBy = this.options.sortBy !== undefined ? this.options.sortBy : this.columns[0].field;
       this.orderBy = this.options.orderBy !== undefined ? this.options.orderBy : 'DESC';
+      this.perPage = this.options.perPage !== undefined ? this.options.perPage : 20;
       this.pagination.currentPage = 1;
-      this.fetch();
     },
 
     redirect(id) {

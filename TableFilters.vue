@@ -58,8 +58,9 @@ export default {
       filters: [],
     };
   },
-  created() {
+  mounted() {
     if (this.filterButtons) {
+      // build buttons array
       this.filterButtons.forEach((filter) => {
         const button = {
           value: filter.value,
@@ -69,6 +70,7 @@ export default {
         };
         this.filters.push(button);
       });
+      // fetch local storage
     }
   },
   methods: {
@@ -99,6 +101,7 @@ export default {
       });
       // reset table
       this.$parent.reset();
+      this.$parent.fetch();
     },
   },
 }
