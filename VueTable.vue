@@ -12,7 +12,7 @@
           <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
             <thead class="bg-gray-50">
             <tr>
-              <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pt-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th v-for="column in columns" :key="column.id" scope="col" :class="style[cssFramework].col">
                 <div class="flex justify-between cursor-pointer" @click="submitSort(column)">
                   <div class="mx-1">
                     <span class="inline-block align-middle">{{ column.name }}</span>
@@ -77,6 +77,7 @@ import { DateTime } from 'luxon';
 
 import TableFilters from './TableFilters.vue';
 import TablePagination from './TablePagination.vue';
+import style from './style'
 
 export default {
   components: {
@@ -96,9 +97,14 @@ export default {
       type: Object,
       required: false,
     },
+    cssFramework: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
+      style,
       loading: false,
       lines: [],
       filters: {},
