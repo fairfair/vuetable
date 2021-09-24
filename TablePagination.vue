@@ -1,15 +1,14 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <div class="bg-white py-3 flex items-center justify-between">
-    <div class="flex-1 flex justify-between sm:hidden">
-      <a href="#" @click="previous" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+  <div :class="style[cssFramework].pagination.main">
+    <div v-if="cssFramework === 'tailwind'" :class="style[cssFramework].pagination.responsive_tabs">
+      <a href="#" @click="previous" :class="style[cssFramework].pagination.previous_button">
         Précédent
       </a>
-      <a href="#" @click="next" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+      <a href="#" @click="next" :class="style[cssFramework].pagination.next_button">
         Suivant
       </a>
     </div>
-    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+    <div :class="style[cssFramework].pagination.sub_main">
       <div>
         <p class="text-sm text-gray-700">
           Affichage de
@@ -31,7 +30,7 @@
         <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
           <a href="#" @click="previous" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
             <span class="sr-only">Précédent</span>
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            <svg :width="style[cssFramework].size.svg_width" :height="style[cssFramework].size.svg_height" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           </a>
           <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
           <a href="#" @click="previous" v-show="pagination.currentPage > 1" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
@@ -45,7 +44,7 @@
           </a>
           <a href="#" @click="next" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
             <span class="sr-only">Suivant</span>
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <svg :width="style[cssFramework].size.svg_width" :height="style[cssFramework].size.svg_height" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
           </a>
         </nav>
       </div>
@@ -54,11 +53,20 @@
 </template>
 
 <script>
-// import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/solid';
+import style from './style'
 
 export default {
   props: {
     pagination: Object,
+    cssFramework: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      style,
+    }
   },
   methods: {
     previous() {

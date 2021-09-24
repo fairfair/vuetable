@@ -4,6 +4,7 @@
       <table-filters
         ref="filterComponent"
         :filterButtons="options.filterButtons"
+        :cssFramework="cssFramework"
       ></table-filters>
     </div>
     <div class="overflow-x-auto py-2">
@@ -12,15 +13,15 @@
           <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
             <thead class="bg-gray-50">
             <tr>
-              <th v-for="column in columns" :key="column.id" scope="col" :class="style[cssFramework].col">
-                <div class="flex justify-between cursor-pointer" @click="submitSort(column)">
+              <th v-for="column in columns" :key="column.id" scope="col" :class="style[cssFramework].col.main">
+                <div role="button" :class="style[cssFramework].col.click" @click="submitSort(column)">
                   <div class="mx-1">
-                    <span class="inline-block align-middle">{{ column.name }}</span>
+                    <span :class="style[cssFramework].col.name">{{ column.name }}</span>
                   </div>
-                  <svg v-show="orderBy === 'ASC' && sortBy === column.field" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg :width="style[cssFramework].size.svg_width" :height="style[cssFramework].size.svg_height" v-show="orderBy === 'ASC' && sortBy === column.field" :class="style[cssFramework].arrow.svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
                   </svg>
-                  <svg v-show="orderBy === 'DESC' && sortBy === column.field" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg :width="style[cssFramework].size.svg_width" :height="style[cssFramework].size.svg_height" v-show="orderBy === 'DESC' && sortBy === column.field" :class="style[cssFramework].arrow.svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </div>
@@ -65,8 +66,11 @@
         </div>
       </div>
     </div>
-    <div class="">
-      <table-pagination :pagination="pagination"></table-pagination>
+    <div>
+      <table-pagination
+        :pagination="pagination"
+        :cssFramework="cssFramework"
+      />
     </div>
   </div>
 </template>

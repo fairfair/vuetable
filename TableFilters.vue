@@ -28,19 +28,20 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-end">
+    <div :class="style[cssFramework].buttons_header">
       <button
-          class="bg-red-100 p-2 mr-2 font-medium text-sm rounded-md cursor-pointer"
+          :class="style[cssFramework].reset.button"
           @click="reset"
       >
-        <svg class="w-6 h-6 text-red-500 hover:text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg width="25" height="25" :class="style[cssFramework].reset.svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
       <button
-          class="bg-indigo-100 p-2 font-medium text-sm rounded-md cursor-pointer"
-          @click="refresh" >
-        <svg class="w-6 h-6 text-indigo-500 hover:text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        :class="style[cssFramework].refresh.button"
+        @click="refresh"
+      >
+        <svg width="25" height="25" :class="style[cssFramework].refresh.svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
         </svg>
       </button>
@@ -48,13 +49,19 @@
   </div>
 </template>
 <script>
+import style from './style';
 
 export default {
   props: {
     filterButtons: Array,
+    cssFramework: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
+      style,
       filters: [],
     };
   },
