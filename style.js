@@ -9,6 +9,19 @@ export default {
       click: 'flex justify-between cursor-pointer',
       name: 'inline-block align-middle',
     },
+    col2: {
+      main: 'px-6 pb-3 text-left text-xs font-medium tracking-wider',
+    },
+    overflow: 'overflow-x-auto py-2',
+    inline: 'align-middle inline-block min-w-full',
+    overflow_hidden: 'overflow-hidden rounded-lg',
+    table: 'min-w-full divide-y divide-gray-200 border border-gray-200',
+    tbody: {
+      main: 'bg-white divide-y divide-gray-200',
+    },
+    tr: {
+      line: 'cursor-pointer hover:bg-indigo-50',
+    },
     buttons_header: 'flex flex-end',
     arrow: {
       svg: 'w-5 h-5',
@@ -38,6 +51,19 @@ export default {
       main: 'pt-2 text-left font-weight-bold text-secondary text-uppercase',
       click: 'd-flex justify-content-center align-middle',
       name: 'd-inline-block align-middle',
+    },
+    col2: {
+      main: 'px-1 pb-2',
+    },
+    overflow: 'overflow-auto py-2',
+    inline: 'align-middle d-inline-block w-100',
+    overflow_hidden: 'overflow-hidden rounded-lg',
+    table: 'table',
+    tbody: {
+      main: 'border border-top-2',
+    },
+    tr: {
+      line: '',
     },
     buttons_header: 'd-flex justify-content-start w-25 m-2',
     arrow: {

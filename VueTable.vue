@@ -7,10 +7,10 @@
         :cssFramework="cssFramework"
       ></table-filters>
     </div>
-    <div class="overflow-x-auto py-2">
-      <div class="align-middle inline-block min-w-full">
-        <div class="overflow-hidden rounded-lg">
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
+    <div :class="style[cssFramework].overflow">
+      <div :class="style[cssFramework].inline">
+        <div :class="style[cssFramework].overflow_hidden">
+          <table :class="style[cssFramework].table">
             <thead class="bg-gray-50">
             <tr>
               <th v-for="column in columns" :key="column.id" scope="col" :class="style[cssFramework].col.main">
@@ -28,7 +28,7 @@
               </th>
             </tr>
             <tr>
-              <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pb-3 text-left text-xs font-medium tracking-wider">
+              <th v-for="column in columns" :key="column.id" scope="col" :class="style[cssFramework].col2.main">
                 <div class="mt-1" v-if="column.searchField">
                   <label :for="column.field" class="sr-only">{{ column.name }}</label>
                   <input @keyup.enter="submitSearch(column, $event.target.value)" :id="column.field" type="text" :name="column.field" class="py-1 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Rechercher" />
@@ -36,8 +36,13 @@
               </th>
             </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200" v-if="lines.length > 0">
-            <tr v-for="line in lines" :key="line.id" @click="redirect(line.order_id)" class="cursor-pointer hover:bg-indigo-50">
+            <tbody v-if="lines.length > 0" :class="style[cssFramework].tbody.main">
+            <tr
+              v-for="line in lines"
+              :key="line.id" role="button"
+              @click="redirect(line.order_id)"
+              :class="style[cssFramework].tr.line"
+            >
               <td v-for="column in columns" :key="column.id" class="px-6 py-4 whitespace-nowrap">
                 <div v-if="column.kind === 'text'" class="text-gray-900">
                   {{ line[column.field] }}
