@@ -20,24 +20,22 @@
 - apiUrl: api endpoint
 - columns: array of columns to display in the table
 
-exemple of column object:
+example of column object:
 ```
 {
     name: 'Statut', // title displayed in the table
     field: 'order_status', // database field name
     kind: 'label', // also available : id, text & date
     searchField: true,
-    enums: enums.ORDER_STATUS, // optionnal, used for labelled items
-}
-```
-
-exemple of labelled item object:
-```
-{
-    name: 'A proposer',
-    field: 'order_status',
-    value: 0,
-    color: 'red',
+    enums: [ // optionnal, used for labelled items
+        {
+            name: 'A proposer',
+            field: 'order_status',
+            value: 0,
+            color: 'red',
+        },
+        { ... },
+    ], 
 }
 ```
 
@@ -50,8 +48,8 @@ exemple of labelled item object:
 - defaultFilters: object of filters set until reset, see api doc for syntax
 - permanentFilters: object of filters set for every request, see api doc for syntax
 - onRowClicked: object with two params,
-  - page: target component name if a row is clicked
   - field: field used as param for redirection (default is first column)
+  - page: target component name ; if undefined, an event 'on-row-clicked' is emitted with field value
 
 ## Todo
 

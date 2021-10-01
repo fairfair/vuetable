@@ -245,10 +245,14 @@ export default {
 
     redirect(line) {
       if (this.options.onRowClicked !== undefined) {
-        if (this.options.onRowClicked.field) {
-          this.$router.push({ name: this.options.onRowClicked.page, params: { id: line[this.options.onRowClicked.field] } });
+        const id = (this.options.onRowClicked.field !== undefined)
+          ? line[this.options.onRowClicked.field]
+          : line[this.columns[0].field];
+
+        if (this.options.onRowClicked.page !== undefined) {
+          this.$router.push({ name: this.options.onRowClicked.page, params: { id } });
         } else {
-          this.$router.push({ name: this.options.onRowClicked.page, params: { id: line[this.columns[0].field] } });
+          this.$emit('on-row-clicked', id);
         }
       }
     },
