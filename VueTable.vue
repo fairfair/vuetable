@@ -12,7 +12,7 @@
           <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
             <thead class="bg-gray-50">
             <tr>
-              <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pt-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pt-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                 <div class="flex justify-between cursor-pointer" @click="submitSort(column)">
                   <div class="mx-1">
                     <span class="inline-block align-middle">{{ column.name }}</span>
@@ -36,7 +36,7 @@
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200" v-if="lines.length > 0">
-            <tr v-for="line in lines" :key="line.id" @click="redirect(line.order_id)" class="cursor-pointer hover:bg-indigo-50">
+            <tr v-for="line in lines" :key="line.id" @click="redirect(line)" class="cursor-pointer hover:bg-indigo-50">
               <td v-for="column in columns" :key="column.id" class="px-6 py-4 whitespace-nowrap">
                 <div v-if="column.kind === 'text'" class="text-gray-900">
                   {{ line[column.field] }}
@@ -84,6 +84,10 @@ export default {
     TablePagination,
   },
   props: {
+    name: {
+      type: String,
+      required: true,
+    },
     apiUrl: {
       type: String,
       required: true,
@@ -239,9 +243,13 @@ export default {
       this.pagination.currentPage = 1;
     },
 
-    redirect(id) {
+    redirect(line) {
       if (this.options.onRowClicked !== undefined) {
-        this.$router.push({ name: this.options.onRowClicked, params: { id } });
+        if (this.options.onRowClicked.field) {
+          this.$router.push({ name: this.options.onRowClicked.page, params: { id: line[this.options.onRowClicked.field] } });
+        } else {
+          this.$router.push({ name: this.options.onRowClicked.page, params: { id: line[this.columns[0].field] } });
+        }
       }
     },
 

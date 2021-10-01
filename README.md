@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Vue 2
+- Vue 2 & 3
 - Tailwindcss
 - Use axios with global instance called $http
 
@@ -11,11 +11,12 @@
 ### Default values
 
 - perPage : 20
-- sortBy : first columnn
+- sortBy : first column
 - orderBy : DESC
 
 ### Required props
 
+- name: name of the table (used for localstorage)
 - apiUrl: api endpoint
 - columns: array of columns to display in the table
 
@@ -48,9 +49,11 @@ exemple of labelled item object:
 - filterButtons: array of filters clickable, see labelled item above
 - defaultFilters: object of filters set until reset, see api doc for syntax
 - permanentFilters: object of filters set for every request, see api doc for syntax
-- onRowClicked: target component name if a row is clicked
+- onRowClicked: object with two params,
+  - page: target component name if a row is clicked
+  - field: field used as param for redirection (default is first column)
 
 ## Todo
 
 - refresh ui according to localstorage config
-- add bootstrap compatibility
+- update localstorage params with table name
