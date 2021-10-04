@@ -9,7 +9,7 @@
     <div class="overflow-x-auto py-2">
       <div class="align-middle inline-block min-w-full">
         <div class="overflow-hidden rounded-lg">
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
+          <table class="min-w-full divide-y divide-gray-200 border border-gray-200" :class="loading ? 'is-loading' : ''">
             <thead class="bg-gray-50">
             <tr>
               <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pt-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
@@ -279,3 +279,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.is-loading {
+  filter: blur(1px);
+  cursor: wait!important;
+}
+</style>
