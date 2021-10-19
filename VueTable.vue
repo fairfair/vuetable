@@ -2,6 +2,7 @@
   <div class="flex flex-col">
     <div class="overflow-x-auto">
       <table-filters
+        v-if="options"
         ref="filterComponent"
         :filterButtons="options.filterButtons"
       ></table-filters>
@@ -150,7 +151,7 @@ export default {
         page: this.pagination.currentPage,
       };
 
-      const filters = this.options.permanentFilters
+      const filters = this.options && this.options.permanentFilters
         ? { ...this.options.permanentFilters, ...this.filters }
         : this.filters;
 
@@ -237,9 +238,9 @@ export default {
 
     reset() {
       this.filters = {};
-      this.sortBy = this.options.sortBy !== undefined ? this.options.sortBy : this.columns[0].field;
-      this.orderBy = this.options.orderBy !== undefined ? this.options.orderBy : 'DESC';
-      this.perPage = this.options.perPage !== undefined ? this.options.perPage : 20;
+      this.sortBy = this.options && this.options.sortBy !== undefined ? this.options.sortBy : this.columns[0].field;
+      this.orderBy = this.options && this.options.orderBy !== undefined ? this.options.orderBy : 'DESC';
+      this.perPage = this.options && this.options.perPage !== undefined ? this.options.perPage : 20;
       this.pagination.currentPage = 1;
     },
 
