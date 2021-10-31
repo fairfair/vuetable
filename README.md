@@ -50,8 +50,3 @@ example of column object:
 - onRowClicked: object with two params,
   - field: field used as param for redirection (default is first column)
   - page: target component name ; if undefined, an event 'on-row-clicked' is emitted with field value
-
-## Todo
-
-- refresh ui according to localstorage config
-- update localstorage params with table name

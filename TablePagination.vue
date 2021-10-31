@@ -14,7 +14,7 @@
         <p class="text-sm text-gray-700">
           Affichage de
           {{ ' ' }}
-          <span class="font-medium">{{ pagination.to === 1 ? 0 : pagination.from }}</span>
+          <span class="font-medium">{{ pagination.to === 0 ? 0 : pagination.from }}</span>
           {{ ' ' }}
           à
           {{ ' ' }}

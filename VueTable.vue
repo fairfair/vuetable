@@ -37,7 +37,7 @@
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200" v-if="lines.length > 0">
-            <tr v-for="line in lines" :key="line.id" @click="redirect(line)" class="cursor-pointer hover:bg-indigo-50">
+            <tr v-for="line in lines" :key="line.id" @click="redirect(line)" class="hover:bg-indigo-50" :class="options && options.onRowClicked ? 'cursor-pointer' : ''">
               <td v-for="column in columns" :key="column.id" class="px-6 py-4 whitespace-nowrap">
                 <div v-if="column.kind === 'text'" class="text-gray-900">
                   {{ line[column.field] }}
@@ -124,10 +124,19 @@ export default {
     this.reset();
 
     // if localStorage : fetch it
-    if (localStorage.filters || localStorage.sortBy || localStorage.orderBy) {
-      if (localStorage.filters) this.filters = JSON.parse(localStorage.filters);
-      if (localStorage.sortBy) this.sortBy = localStorage.sortBy;
-      if (localStorage.orderBy) this.orderBy = localStorage.orderBy;
+    if (localStorage.getItem(`${this.name}-filters`) 
+      || localStorage.getItem(`${this.name}-sortBy`)
+      || localStorage.getItem(`${this.name}-orderBy`))
+    {
+      if (localStorage.getItem(`${this.name}-filters`)) 
+        this.filters = JSON.parse(localStorage.getItem(`${this.name}-filters`));
+
+      if (localStorage.getItem(`${this.name}-sortBy`)) 
+        this.sortBy = localStorage.getItem(`${this.name}-sortBy`);
+      
+      if (localStorage.getItem(`${this.name}-orderBy`)) 
+        this.orderBy = localStorage.getItem(`${this.name}-orderBy`);
+        
     } else if (this.options.defaultFilters !== undefined) {
       this.filters = this.options.defaultFilters;
     }
@@ -140,9 +149,9 @@ export default {
       this.loading = true;
 
       // save params in localstorage
-      localStorage.setItem('filters', JSON.stringify(this.filters));
-      localStorage.setItem('sortBy', this.sortBy);
-      localStorage.setItem('orderBy', this.orderBy);
+      localStorage.setItem(`${this.name}-filters`, JSON.stringify(this.filters));
+      localStorage.setItem(`${this.name}-sortBy`, this.sortBy);
+      localStorage.setItem(`${this.name}-orderBy`, this.orderBy);
 
       const defaultParams = {
         sortBy: this.sortBy,
@@ -167,20 +176,23 @@ export default {
         });
       });
 
-      const res = await this.$http.get(this.apiUrl, { params });
-
-      if (res) {
-        this.lines = res.data.data;
-        this.pagination = {
-          currentPage: res.data.current_page,
-          from: res.data.from,
-          to: res.data.to,
-          total: res.data.total,
-          lastPage: res.data.last_page,
-        };
+      try {
+        const res = await this.$http.get(this.apiUrl, { params });
+        if (res) {
+          this.lines = res.data.data;
+          this.pagination = {
+            currentPage: res.data.current_page,
+            from: res.data.from,
+            to: res.data.to,
+            total: res.data.total,
+            lastPage: res.data.last_page,
+          };
+        }
+      } catch (e) {
+        //
+      } finally {
+        this.loading = false;
       }
-
-      this.loading = false;
     },
 
     addFilter(field, value, query) {
@@ -218,6 +230,7 @@ export default {
         this.addFilter(column.field, value, query);
       }
 
+      this.pagination.currentPage = 1;
       this.fetch();
     },
 
@@ -228,6 +241,7 @@ export default {
       } else {
         this.orderBy = 'ASC';
       }
+      this.pagination.currentPage = 1;
       this.fetch();
     },
 
