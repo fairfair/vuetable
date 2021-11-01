@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-col">
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto scrollbar">
       <table-filters
         v-if="options"
         ref="filterComponent"
         :filterButtons="options.filterButtons"
       ></table-filters>
     </div>
-    <div class="overflow-x-auto py-2">
+    <div class="overflow-x-auto py-2 scrollbar ">
       <div class="align-middle inline-block min-w-full">
         <div class="overflow-hidden rounded-lg">
           <table class="min-w-full divide-y divide-gray-200 border border-gray-200" :class="loading ? 'is-loading' : ''">
