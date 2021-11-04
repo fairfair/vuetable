@@ -67,14 +67,23 @@ export default {
         let active = false;
         if (localStorage.getItem(`${this.name}-filters`)) {
           const filters = JSON.parse(localStorage.getItem(`${this.name}-filters`));
-          const values = Object.values(filters);
-          if (values.length > 0) {
-            if (typeof values[0] === 'string' && values[0].split(',').includes(filter.value.toString())) {
-              active = true;
-            } else if (values[0] === filter.value) {
-              active = true;
-            }
+          const keys = Object.keys(filters);
+          if (keys.length > 0) {
+            const values = Object.values(filters);
+            const regex = new RegExp(this.filterButtons[0].field);
+
+            keys.forEach((key, index) => {
+              if (regex.test(key)) {
+                console.log(key)
+                if (typeof values[index] === 'string' && values[index].split(',').includes(filter.value.toString())) {
+                  active = true;
+                } else if (values[index] === filter.value) {
+                  active = true;
+                }
+              }
+            });
           }
+
         }
 
         const button = {
