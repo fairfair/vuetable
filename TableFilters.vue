@@ -52,6 +52,7 @@
 export default {
   props: {
     filterButtons: Array,
+    name: String,
   },
   data() {
     return {
@@ -62,11 +63,25 @@ export default {
     if (this.filterButtons) {
       // build buttons array
       this.filterButtons.forEach((filter) => {
+        // check localstorage
+        let active = false;
+        if (localStorage.getItem(`${this.name}-filters`)) {
+          const filters = JSON.parse(localStorage.getItem(`${this.name}-filters`));
+          const values = Object.values(filters);
+          if (values.length > 0) {
+            if (typeof values[0] === 'string' && values[0].split(',').includes(filter.value.toString())) {
+              active = true;
+            } else if (values[0] === filter.value) {
+              active = true;
+            }
+          }
+        }
+
         const button = {
           value: filter.value,
           field: filter.field,
           name: filter.name,
-          active: false,
+          active,
         };
         this.filters.push(button);
       });

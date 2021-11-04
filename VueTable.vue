@@ -4,6 +4,7 @@
       <table-filters
         v-if="options"
         ref="filterComponent"
+        :name="name"
         :filterButtons="options.filterButtons"
       ></table-filters>
     </div>
@@ -124,19 +125,21 @@ export default {
     this.reset();
 
     // if localStorage : fetch it
-    if (localStorage.getItem(`${this.name}-filters`) 
+    if (localStorage.getItem(`${this.name}-filters`)
       || localStorage.getItem(`${this.name}-sortBy`)
-      || localStorage.getItem(`${this.name}-orderBy`))
-    {
-      if (localStorage.getItem(`${this.name}-filters`)) 
+      || localStorage.getItem(`${this.name}-orderBy`)
+    ) {
+      if (localStorage.getItem(`${this.name}-filters`)) {
         this.filters = JSON.parse(localStorage.getItem(`${this.name}-filters`));
+      }
 
-      if (localStorage.getItem(`${this.name}-sortBy`)) 
+      if (localStorage.getItem(`${this.name}-sortBy`)) {
         this.sortBy = localStorage.getItem(`${this.name}-sortBy`);
-      
-      if (localStorage.getItem(`${this.name}-orderBy`)) 
+      }
+
+      if (localStorage.getItem(`${this.name}-orderBy`)) {
         this.orderBy = localStorage.getItem(`${this.name}-orderBy`);
-        
+      }
     } else if (this.options.defaultFilters !== undefined) {
       this.filters = this.options.defaultFilters;
     }
@@ -156,7 +159,7 @@ export default {
       const defaultParams = {
         sortBy: this.sortBy,
         orderBy: this.orderBy,
-        per_page: this.perPage,
+        perPage: this.perPage,
         page: this.pagination.currentPage,
       };
 
