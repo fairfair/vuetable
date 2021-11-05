@@ -164,7 +164,7 @@ export default {
       const defaultParams = {
         sortBy: this.sortBy,
         orderBy: this.orderBy,
-        perPage: this.perPage,
+        per_page: this.perPage,
         page: this.pagination.currentPage,
       };
 
