@@ -25,7 +25,7 @@ example of column object:
 {
     name: 'Statut', // title displayed in the table
     field: 'order_status', // database field name
-    kind: 'label', // also available : id, text & date
+    kind: 'label', // also available : id, text, date & age
     searchField: true,
     enums: [ // optionnal, used for labelled items
         {

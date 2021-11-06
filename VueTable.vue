@@ -58,6 +58,10 @@
                 <div v-if="column.kind === 'date'" class="text-gray-900">
                   {{ getDate(line[column.field]) }}
                 </div>
+
+                <div v-if="column.kind === 'age'" class="text-gray-900">
+                  {{ getAge(line[column.field]) }}
+                </div>
               </td>
             </tr>
             </tbody>
@@ -80,7 +84,7 @@
 
 <script>
 
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 
 import TableFilters from './TableFilters.vue';
 import TablePagination from './TablePagination.vue';
@@ -281,14 +285,24 @@ export default {
     },
 
     // DISPLAY METHODS
-
+    findArrayValueByType(val, arr) {
+      switch (typeof val) {
+        case 'boolean':
+          return arr.find((i) => i.value === val);
+        case 'number':
+          return arr.find((i) => i.value === parseInt(val, 10));
+        default:
+          return null;
+      }
+    },
+      
     showLabelContent(val, arr) {
-      const obj = arr.find((i) => i.value === parseInt(val, 10));
+      const obj = this.findArrayValueByType(val, arr);
       return (obj) ? obj.name : 'NR';
     },
 
     showLabelColor(val, arr) {
-      const obj = arr.find((i) => i.value === parseInt(val, 10));
+      const obj = this.findArrayValueByType(val, arr);
       return (obj) ? obj.color : 'gray';
     },
 
@@ -297,6 +311,30 @@ export default {
         const date = DateTime.fromISO(value, { zone: 'utc' }).setZone('Europe/Paris');
         return date.toLocaleString(DateTime.DATETIME_MED);
       }
+      return '';
+    },
+
+    getAge(value) {
+      if (value) {
+        const date = DateTime.fromISO(value, { zone: 'utc' });
+        const dur = Interval.fromDateTimes(date, DateTime.local());
+
+        if (dur.e) {
+          // age object
+          const age = dur.toDuration(['days', 'hours', 'minutes']).toObject();
+          // age string
+          let res = age.days !== 0 ? `${age.days}j ` : '';
+          res += age.hours !== 0 ? `${age.hours}h ` : '';
+          const minutes = parseInt(age.minutes, 10);
+          if (minutes !== 0) {
+            res += `${minutes}m`;
+          } else {
+            res += age.days === 0 && age.hours === 0 ? '< 1m' : '';
+          }
+          return res;
+        }
+      }
+      // else return empty string
       return '';
     },
   },
