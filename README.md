@@ -3,9 +3,9 @@
 ## Breaking changes v2.0
  
 In column keys :
-`kind` become `type`
-`label` become `badge`
-`enums` become `badgeOptions`
+- `kind` become `type`
+- `label` become `badge`
+- `enums` become `badgeOptions`
 
 Now only two keys are mandatory in columns array : name and field.
 
