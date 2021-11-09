@@ -1,10 +1,19 @@
 # VueTable Component
 
+## Breaking changes v2.0
+ 
+In column keys :
+`kind` become `type`
+`label` become `badge`
+`enums` become `badgeOptions`
+
+Now only two keys are mandatory in columns array : name and field.
+
 ## Requirements
 
-- Vue 2 & 3
+- Vue 2 or 3
 - Tailwindcss
-- Use axios with global instance called $http
+- Axios as global instance called $http
 
 ## API
 
@@ -23,11 +32,11 @@
 example of column object:
 ```
 {
-    name: 'Statut', // title displayed in the table
-    field: 'order_status', // database field name
-    kind: 'label', // also available : id, text, date & age
+    name: 'Statut', // required: column title
+    field: 'order_status', // required: database field name
     searchField: true,
-    enums: [ // optionnal, used for labelled items
+    type: 'badge',
+    badgeOptions: [
         {
             name: 'A proposer',
             field: 'order_status',
@@ -38,6 +47,13 @@ example of column object:
     ], 
 }
 ```
+
+Note about type options: 
+- text (default) : use 'contains' operator in queries 
+- id : use 'eq' operator in queries
+- date & age : format value as human readable data
+- badge : display a label according to badgeOptions if exist, show field value else
+
 
 ### Optional props: options object, with following keys
 
@@ -50,3 +66,5 @@ example of column object:
 - onRowClicked: object with two params,
   - field: field used as param for redirection (default is first column)
   - page: target component name ; if undefined, an event 'on-row-clicked' is emitted with field value
+
+

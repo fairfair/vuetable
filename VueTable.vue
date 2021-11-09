@@ -45,22 +45,34 @@
             <tbody class="bg-white divide-y divide-gray-200" v-if="lines.length > 0">
             <tr v-for="line in lines" :key="line.id" @click="redirect(line)" class="hover:bg-indigo-50" :class="options && options.onRowClicked ? 'cursor-pointer' : ''">
               <td v-for="column in columns" :key="column.id" class="px-6 py-4 whitespace-nowrap">
-                <div v-if="column.kind === 'text' || column.kind === 'id'" class="text-gray-900">
+                <div v-if="column.type === 'id'" class="text-gray-900">
                   {{ line[column.field] }}
                 </div>
 
-                <div v-if="column.kind === 'label'">
-                  <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-${showLabelColor(line[column.field], column.enums)}-100 text-${showLabelColor(line[column.field], column.enums)}-800`">
-                   {{ showLabelContent(line[column.field], column.enums) }}
-                  </span>
+                <div v-else-if="column.type === 'badge'">
+                  <div v-if="column.badgeOptions">
+                    <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-${showBadgeColor(line[column.field], column.badgeOptions)}-100 text-${showBadgeColor(line[column.field], column.badgeOptions)}-800`">
+                      {{ showBadgeContent(line[column.field], column.badgeOptions) }}
+                    </span>
+                  </div>
+                  <div v-else>
+                    <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-800`">
+                      {{ line[column.field] }}
+                    </span>
+                  </div>
+                  
                 </div>
 
-                <div v-if="column.kind === 'date'" class="text-gray-900">
+                <div v-else-if="column.type === 'date'" class="text-gray-900">
                   {{ getDate(line[column.field]) }}
                 </div>
 
-                <div v-if="column.kind === 'age'" class="text-gray-900">
+                <div v-else-if="column.type === 'age'" class="text-gray-900">
                   {{ getAge(line[column.field]) }}
+                </div>
+
+                <div v-else class="text-gray-900">
+                  {{ line[column.field] }}
                 </div>
               </td>
             </tr>
@@ -168,7 +180,7 @@ export default {
       const defaultParams = {
         sortBy: this.sortBy,
         orderBy: this.orderBy,
-        per_page: this.perPage,
+        perPage: this.perPage,
         page: this.pagination.currentPage,
       };
 
@@ -236,7 +248,7 @@ export default {
 
     // used in column search inputs
     submitSearch(column, value) {
-      const query = (column.kind === 'id') ? 'eq' : 'contains';
+      const query = (column.type === 'id') ? 'eq' : 'contains';
       this.removeFilter(column.field, value, query);
       if (value !== '') {
         this.addFilter(column.field, value, query);
@@ -292,18 +304,18 @@ export default {
         case 'number':
           return arr.find((i) => i.value === parseInt(val, 10));
         default:
-          return null;
+          return arr.find((i) => i.value === val);
       }
     },
       
-    showLabelContent(val, arr) {
-      const obj = this.findArrayValueByType(val, arr);
-      return (obj) ? obj.name : 'NR';
+    showBadgeContent(val, arr) {
+      let res = this.findArrayValueByType(val, arr);
+      return (res) ? res.name : 'NR';
     },
 
-    showLabelColor(val, arr) {
-      const obj = this.findArrayValueByType(val, arr);
-      return (obj) ? obj.color : 'gray';
+    showBadgeColor(val, arr) {
+      const res = this.findArrayValueByType(val, arr);
+      return (res) ? res.color : 'gray';
     },
 
     getDate(value) {

@@ -20,7 +20,7 @@
                 :href="tab.href"
                 :class="[tab.active ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-500 hover:text-gray-700', 'px-3 py-2 font-medium text-sm rounded-md cursor-pointer']"
                 :aria-current="tab.active ? 'page' : undefined"
-                @click="clickFilter(tab.value)"
+                @click="clickFilter(tab)"
             >
               {{ tab.name }}
             </a>
@@ -90,6 +90,7 @@ export default {
           value: filter.value,
           field: filter.field,
           name: filter.name,
+          operator: filter.operator,
           active,
         };
         this.filters.push(button);
@@ -99,14 +100,16 @@ export default {
   },
   methods: {
     // refresh ui
-    clickFilter(value) {
+    clickFilter(button) {
+      // console.log(button)
       this.filters.forEach((filter, i) => {
-        if (filter.value === value) {
+        if (filter.value === button.value && filter.field === button.field && filter.operator === button.operator) {
           this.filters[i].active = !filter.active;
+          const operator = filter.operator ? filter.operator : 'eq';
           if (filter.active) {
-            this.$parent.addFilter(filter.field, filter.value, 'eq');
+            this.$parent.addFilter(filter.field, filter.value, operator);
           } else {
-            this.$parent.removeFilter(filter.field, filter.value, 'eq');
+            this.$parent.removeFilter(filter.field, filter.value, operator);
           }
         }
       });
