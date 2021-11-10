@@ -10,11 +10,17 @@
     </div>
     <div class="overflow-x-auto py-2 scrollbar ">
       <div class="align-middle inline-block min-w-full">
-        <div class="overflow-hidden rounded-lg">
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-200" :class="loading ? 'is-loading' : ''">
+        <div class="overflow-hidden rounded">
+
+          <div class="relative w-full bg-gray-200" v-if="loading">
+            <div style="width: 100%" class="absolute top-0 h-1 shim"></div>
+          </div>
+          <div class="h-1 bg-gray-100" v-else></div>
+          
+          <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
             <thead class="bg-gray-50">
             <tr>
-              <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pt-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+              <th v-for="column in columns" :key="column.id" scope="col" class="px-6 pt-3 text-left font-medium tracking-wider uppercase text-sm">
                 <div class="flex justify-between cursor-pointer" @click="submitSort(column)">
                   <div class="mx-1">
                     <span class="inline-block align-middle">{{ column.name }}</span>
@@ -354,8 +360,34 @@ export default {
 </script>
 
 <style scoped>
-.is-loading {
-  filter: blur(1px);
-  cursor: wait!important;
+
+.shim {
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(0, 0, 255, 0.7);
 }
+.shim::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(233, 233, 233, 1) 0,
+    rgba(233, 233, 233, 0.9) 50%,
+    rgba(233, 233, 233, 0.8) 100%
+  );
+  animation: shimmer 3s ease-out infinite;
+  content: "";
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+}
+
 </style>
