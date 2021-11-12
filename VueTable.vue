@@ -77,6 +77,10 @@
                   {{ getAge(line[column.field]) }}
                 </div>
 
+                <div v-else-if="column.type === 'duration-days'" class="text-gray-900">
+                  {{ getDurationFromSecondsToDays(line[column.field]) }}
+                </div>
+
                 <div v-else class="text-gray-900">
                   {{ line[column.field] }}
                 </div>
@@ -354,6 +358,9 @@ export default {
       }
       // else return empty string
       return '';
+    },
+    getDurationFromSecondsToDays(value) {
+      return value / (60 * 60 * 24);
     },
   },
 }

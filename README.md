@@ -52,6 +52,7 @@ Note about type options:
 - text (default) : use 'contains' operator in queries 
 - id : use 'eq' operator in queries
 - date & age : format value as human readable data
+- duration-day : Convert seconds integer into days integer
 - badge : display a label according to badgeOptions if exist, show field value else
 
 
