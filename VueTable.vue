@@ -229,12 +229,23 @@ export default {
       }
     },
 
+    castValue(value) {
+        if(value === true) {
+          return 1;
+        } else if (value === false) {
+          return 0;
+        } else {
+          return value;
+        }
+    },
+
     addFilter(field, value, query) {
       const key = `${field}[${query}]`;
+      const castedValueForBackend = this.castValue(value); // Fairfair Backend API can't treat boolean filter values (needs integers)
       if (key in this.filters) {
-        this.filters[key] += `,${value}`;
+        this.filters[key] += `,${castedValueForBackend}`;
       } else {
-        this.filters[key] = value;
+        this.filters[key] = castedValueForBackend;
       }
     },
 
