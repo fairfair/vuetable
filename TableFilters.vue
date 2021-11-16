@@ -60,21 +60,19 @@ export default {
     };
   },
   mounted() {
+    // build buttons array
     if (this.filterButtons) {
-      // build buttons array
       this.filterButtons.forEach((filter) => {
-        // check localstorage
         let active = false;
+        // check localstorage
         if (localStorage.getItem(`${this.name}-filters`)) {
           const filters = JSON.parse(localStorage.getItem(`${this.name}-filters`));
           const keys = Object.keys(filters);
           if (keys.length > 0) {
             const values = Object.values(filters);
-            const regex = new RegExp(this.filterButtons[0].field);
-
             keys.forEach((key, index) => {
+              const regex = new RegExp(filter.field);
               if (regex.test(key)) {
-                console.log(key)
                 if (typeof values[index] === 'string' && values[index].split(',').includes(filter.value.toString())) {
                   active = true;
                 } else if (values[index] === filter.value) {
@@ -83,19 +81,16 @@ export default {
               }
             });
           }
-
         }
 
-        const button = {
+        this.filters.push({
           value: filter.value,
           field: filter.field,
           name: filter.name,
           operator: filter.operator,
           active,
-        };
-        this.filters.push(button);
+        });
       });
-      // fetch local storage
     }
   },
   methods: {
