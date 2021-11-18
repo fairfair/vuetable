@@ -127,10 +127,11 @@
 
                   <div v-else-if="column.type === 'badge'">
                     <div v-if="column.badgeOptions">
-                      <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-${showBadgeColor(line[column.field], column.badgeOptions)}-100 text-${showBadgeColor(line[column.field], column.badgeOptions)}-800`">
-                        {{ showBadgeContent(line[column.field], column.badgeOptions) }}
+                      <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-${showBadge('color', line, column)}-100 text-${showBadge('color', line, column)}-800`">
+                        {{ showBadge('content', line, column) }}
                       </span>
                     </div>
+
                     <div v-else>
                       <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-800`">
                         {{ line[column.field] }}
@@ -402,24 +403,13 @@ export default {
     },
 
     // DISPLAY METHODS
-    findArrayValueByType(val, arr) {
-      switch (typeof val) {
-        case 'boolean':
-          return arr.find((i) => i.value === val);
-        case 'number':
-          return arr.find((i) => i.value === parseInt(val, 10));
-        default:
-          return arr.find((i) => i.value === val);
+
+    showBadge(type, line, column) {
+      const field = (typeof column.field === 'function') ? column.field(line) : column.field;
+      const res = column.badgeOptions.find((i) => i.value === line[field] && i.field === field)
+      if (type === 'content') {
+        return (res) ? res.name : 'NR';
       }
-    },
-
-    showBadgeContent(val, arr) {
-      const res = this.findArrayValueByType(val, arr);
-      return (res) ? res.name : 'NR';
-    },
-
-    showBadgeColor(val, arr) {
-      const res = this.findArrayValueByType(val, arr);
       return (res) ? res.color : 'gray';
     },
 
