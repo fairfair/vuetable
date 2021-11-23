@@ -117,7 +117,13 @@
                   v-for="column in columns"
                   :key="column.id"
                   class="px-6 py-4 whitespace-nowrap"
-                >
+                  :class="(line.work_name === 'Serrurerie') && (
+                    (parseInt(getAgeObj(line.order_created_at).days, 10) === 0) &&
+                    (parseInt(getAgeObj(line.order_created_at).hours, 10) === 0) &&
+                    (parseInt(getAgeObj(line.order_created_at).minutes, 10) < 13) 
+                    
+                  ) ?  'bg-gray-200' : null"
+                > <!-- temporary background color class condition to prevent recent orders -->
                   <div
                     v-if="column.type === 'id'"
                     class="text-gray-900"
@@ -150,7 +156,7 @@
                     v-else-if="column.type === 'age'"
                     class="text-gray-900"
                   >
-                    {{ getAge(line[column.field]) }}
+                    {{ getAgeToString(line[column.field]) }}
                   </div>
 
                   <div
@@ -420,15 +426,20 @@ export default {
       }
       return '';
     },
-
-    getAge(value) {
+    getAgeObj(value) {
       if (value) {
         const date = DateTime.fromISO(value, { zone: 'utc' });
         const dur = Interval.fromDateTimes(date, DateTime.local());
-
         if (dur.e) {
-          // age object
-          const age = dur.toDuration(['days', 'hours', 'minutes']).toObject();
+          return dur.toDuration(['days', 'hours', 'minutes']).toObject();
+        }
+      }
+      return null;
+    },
+    getAgeToString(value) {
+      if (value) {
+        const age = this.getAgeObj(value);
+        if (age) {
           // age string
           let res = age.days !== 0 ? `${age.days}j ` : '';
           res += age.hours !== 0 ? `${age.hours}h ` : '';
