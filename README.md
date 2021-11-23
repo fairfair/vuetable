@@ -1,13 +1,11 @@
 # VueTable Component
 
-## Breaking changes v2.0
- 
-In column keys :
-- `kind` become `type`
-- `label` become `badge`
-- `enums` become `badgeOptions`
+## Note 
 
-Now only two keys are mandatory in columns array : name and field.
+To update all submodules :
+```
+git submodule foreach git pull origin main
+```
 
 ## Requirements
 
@@ -33,7 +31,7 @@ example of column object:
 ```
 {
     name: 'Statut', // required: column title
-    field: 'order_status', // required: database field name
+    field: 'order_status', // required: database field name (accept callback)
     searchField: true,
     type: 'badge',
     badgeOptions: [
