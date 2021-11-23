@@ -431,7 +431,7 @@ export default {
         const date = DateTime.fromISO(value, { zone: 'utc' });
         const dur = Interval.fromDateTimes(date, DateTime.local());
         if (dur.e) {
-          return dur.toDuration(['days', 'hours', 'minutes']).toObject();
+          return dur.toDuration(['months', 'days', 'hours', 'minutes']).toObject();
         }
       }
       return null;
