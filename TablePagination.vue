@@ -44,7 +44,7 @@
           <a
             href="#"
             class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-            @click="previous"
+            @click="previous(1)"
           >
             <span class="sr-only">Précédent</span>
             <svg
@@ -61,11 +61,20 @@
             /></svg>
           </a>
           <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
+
+          <a
+            v-show="pagination.currentPage > 2"
+            href="#"
+            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+            @click="previous(2)"
+          >
+            {{ pagination.currentPage - 2 }}
+          </a>
           <a
             v-show="pagination.currentPage > 1"
             href="#"
             class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-            @click="previous"
+            @click="previous(1)"
           >
             {{ pagination.currentPage - 1 }}
           </a>
@@ -80,14 +89,22 @@
             v-show="pagination.currentPage < pagination.lastPage"
             href="#"
             class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
-            @click="next"
+            @click="next(1)"
           >
             {{ pagination.currentPage + 1 }}
           </a>
           <a
+            v-show="pagination.currentPage + 1 < pagination.lastPage"
+            href="#"
+            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
+            @click="next(2)"
+          >
+            {{ pagination.currentPage + 2 }}
+          </a>
+          <a
             href="#"
             class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-            @click="next"
+            @click="next(1)"
           >
             <span class="sr-only">Suivant</span>
             <svg
@@ -117,14 +134,14 @@ export default {
     pagination: Object,
   },
   methods: {
-    previous() {
-      if (this.pagination.currentPage > 1) {
-        this.$parent.navigate(this.pagination.currentPage - 1);
+    previous(number) {
+      if (this.pagination.currentPage > number) {
+        this.$parent.navigate(this.pagination.currentPage - number);
       }
     },
-    next() {
-      if (this.pagination.currentPage < this.pagination.lastPage) {
-        this.$parent.navigate(this.pagination.currentPage + 1);
+    next(number) {
+      if (this.pagination.currentPage + number - 1 < this.pagination.lastPage) {
+        this.$parent.navigate(this.pagination.currentPage + number);
       }
     },
   },

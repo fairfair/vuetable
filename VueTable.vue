@@ -441,13 +441,18 @@ export default {
         const age = this.getAgeObj(value);
         if (age) {
           // age string
-          let res = age.days !== 0 ? `${age.days}j ` : '';
-          res += age.hours !== 0 ? `${age.hours}h ` : '';
-          const minutes = parseInt(age.minutes, 10);
-          if (minutes !== 0) {
-            res += `${minutes}m`;
+          let res = ''
+          if (age.months > 0) {
+            res = `${age.months}m ${age.days}j`;
           } else {
-            res += age.days === 0 && age.hours === 0 ? '< 1m' : '';
+            res += age.days !== 0 ? `${age.days}j ` : '';
+            res += age.hours !== 0 ? `${age.hours}h ` : '';
+            const minutes = parseInt(age.minutes, 10);
+            if (minutes !== 0) {
+              res += `${minutes}m`;
+            } else {
+              res += age.days === 0 && age.hours === 0 ? '< 1m' : '';
+            }
           }
           return res;
         }
