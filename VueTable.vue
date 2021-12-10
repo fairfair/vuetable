@@ -154,7 +154,14 @@
                   <div
                     v-else-if="column.type === 'age'"
                     class="text-gray-900 badge"
-                    :class="getAgeColorBadge(line[column.field])"
+                  >
+                    {{ getAgeToString(line[column.field]) }}
+                  </div>
+
+                  <div
+                    v-else-if="column.type === 'age-badge'"
+                    class="text-gray-900 badge"
+                    :class="getAgeColorBadge(line[column.field], line.order_status, line.order_end_initiator)"
                   >
                     {{ getAgeToString(line[column.field]) }}
                   </div>
@@ -460,20 +467,22 @@ export default {
       // else return empty string
       return '';
     },
-    getAgeColorBadge(value) {
+    getAgeColorBadge(value, order_status, order_end_initiator) {
+      let badgeColor = 'badge-red';
       const age = this.getAgeObj(value);
-      console.log('value', value);
-      console.log('age', age);
-       if (age.days === 0) {
+      if (age.days === 0) {
         if (age.hours < 3) {
-          return 'badge-green';
+          badgeColor = 'badge-green';
         } else if (age.hours >= 3 && age.hours <= 4) {
-          return 'badge-orange';
+          badgeColor = 'badge-orange';
         } else {
-          return 'badge-red';
+          badgeColor = 'badge-red';
         }
       }
-      return 'badge-gray';
+      if ((order_status >= 3) || order_end_initiator) { // Prevent danger badge for closed/canceled missions
+        badgeColor = 'badge-gray';
+      }
+      return badgeColor;
     },
     getDurationFromSecondsToDays(value) {
       return value / (60 * 60 * 24);
