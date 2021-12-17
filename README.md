@@ -40,6 +40,10 @@ example of column object:
             field: 'order_status',
             value: 0,
             color: 'red',
+            colors: { // NEW OPTION (no breaking change) => Custom background & text colors in order to add full classnames for tailwindcss purge
+                background: 'bg-red-100',
+                text: 'text-red-800',
+            }
         },
         { ... },
     ], 

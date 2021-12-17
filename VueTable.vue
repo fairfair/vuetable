@@ -133,7 +133,10 @@
 
                   <div v-else-if="column.type === 'badge'">
                     <div v-if="column.badgeOptions">
-                      <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-${showBadge('color', line, column)}-100 text-${showBadge('color', line, column)}-800`">
+                      <span 
+                        :class="[`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium`,
+                        !column.badgeOptions[0].colors ? `bg-${showBadge('color', line, column)}-100 text-${showBadge('color', line, column)}-800` : `${showBadgeColors(line, column)}` ]"
+                      >
                         {{ showBadge('content', line, column) }}
                       </span>
                     </div>
@@ -425,6 +428,12 @@ export default {
       }
       return (res) ? res.color : 'gray';
     },
+    showBadgeColors(line, column) {
+      const field = (typeof column.field === 'function') ? column.field(line) : column.field;
+      const res = column.badgeOptions.find((i) => i.value === line[field] && i.field === field)
+      return (res) ? `${res.colors.background} ${res.colors.text}` : 'bg-gray-100 text-gray-100';
+    },
+
 
     getDate(value) {
       if (value) {
