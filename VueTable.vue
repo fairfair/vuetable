@@ -22,7 +22,7 @@
           </div>
           <div
             v-else
-            class="h-1 bg-gray-100 dark:bg-gray-800"
+            class="h-1 bg-white dark:bg-gray-800"
           />
 
           <table class="min-w-full divide-y divide-gray-200 border border-gray-200 dark:border-gray-600">
@@ -104,7 +104,7 @@
             </thead>
             <tbody
               v-if="lines.length > 0"
-              class="bg-white dark:bg-gray-700/40 divide-y border-t dark:text-gray-400 dark:divide-gray-600 dark:border-none"
+              class="bg-white dark:bg-gray-700/40 divide-y border-t dark:text-gray-400 dark:divide-gray-600 border-none"
             >
               <tr
                 v-for="line in lines"
@@ -122,7 +122,7 @@
                     (parseInt(getAgeObj(line.order_created_at).hours, 10) === 0) &&
                     (parseInt(getAgeObj(line.order_created_at).minutes, 10) < 13) 
                     
-                  ) ?  'bg-gray-600/60' : null"
+                  ) ?  'bg-gray-200 dark:bg-gray-600/60' : null"
                 > <!-- temporary background color class condition to prevent recent orders -->
                   <div
                     v-if="column.type === 'id'"
@@ -431,7 +431,7 @@ export default {
     showBadgeColors(line, column) {
       const field = (typeof column.field === 'function') ? column.field(line) : column.field;
       const res = column.badgeOptions.find((i) => i.value === line[field] && i.field === field)
-      return (res) ? `${res.colors.background} ${res.colors.text}` : 'bg-gray-100 text-gray-100 dark:bg-gray-400 dark:text-gray-700';
+      return (res) ? `${res.colors.background} ${res.colors.text}` : 'bg-gray-100 text-gray-600 dark:bg-gray-400 dark:text-gray-700';
     },
 
 
