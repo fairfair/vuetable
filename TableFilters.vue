@@ -42,7 +42,7 @@
     </div>
     <div class="flex flex-end">
       <button
-        class="bg-red-100 p-2 mr-2 font-medium text-sm rounded-md cursor-pointer"
+        class="bg-red-100 p-2 mr-2 font-medium text-sm rounded-md cursor-pointer dark:bg-red-500/30 dark:text-red-500/80"
         @click="reset"
       >
         <svg
@@ -61,7 +61,7 @@
         </svg>
       </button>
       <button
-        class="bg-indigo-100 p-2 font-medium text-sm rounded-md cursor-pointer"
+        class="bg-indigo-100 p-2 font-medium text-sm rounded-md cursor-pointer dark:bg-indigo-500/20 dark:text-indigo-600/80"
         @click="refresh"
       >
         <svg

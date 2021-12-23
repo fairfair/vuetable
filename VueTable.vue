@@ -191,7 +191,7 @@
                   :colspan="columns.length"
                   class="p-3 text-center"
                 >
-                  <span class="">Aucun résultat</span>
+                  <span class="dark:text-gray-400">Aucun résultat</span>
                 </td>
               </tr>
             </tbody>
