@@ -95,7 +95,7 @@
                       type="text"
                       :name="column.field"
                       placeholder="Rechercher"
-                      class="py-1 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 dark:placeholder:text-gray-500"
+                      class="py-1 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-gray-200 dark:placeholder:text-gray-500"
                       @keyup.enter="submitSearch(column, $event.target.value)"
                     >
                   </div>
@@ -104,12 +104,12 @@
             </thead>
             <tbody
               v-if="lines.length > 0"
-              class="bg-white divide-y divide-gray-200 dark:text-gray-400 dark:divide-gray-600"
+              class="bg-white dark:bg-gray-700/40 divide-y border-t dark:text-gray-400 dark:divide-gray-600 dark:border-none"
             >
               <tr
                 v-for="line in lines"
                 :key="line.id"
-                class="hover:bg-indigo-50 dark:bg-gray-800/95 dark:hover:bg-gray-800/90 "
+                class="hover:bg-indigo-50 dark:hover:bg-gray-800"
                 :class="options && options.onRowClicked ? 'cursor-pointer' : ''"
                 @click="redirect(line)"
               >
@@ -122,7 +122,7 @@
                     (parseInt(getAgeObj(line.order_created_at).hours, 10) === 0) &&
                     (parseInt(getAgeObj(line.order_created_at).minutes, 10) < 13) 
                     
-                  ) ?  'bg-gray-200' : null"
+                  ) ?  'bg-gray-600/60' : null"
                 > <!-- temporary background color class condition to prevent recent orders -->
                   <div
                     v-if="column.type === 'id'"
