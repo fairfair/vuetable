@@ -431,7 +431,7 @@ export default {
     showBadgeColors(line, column) {
       const field = (typeof column.field === 'function') ? column.field(line) : column.field;
       const res = column.badgeOptions.find((i) => i.value === line[field] && i.field === field)
-      return (res) ? `${res.colors.background} ${res.colors.text}` : 'bg-gray-100 text-gray-100';
+      return (res) ? `${res.colors.background} ${res.colors.text}` : 'bg-gray-100 text-gray-100 dark:bg-gray-400 dark:text-gray-700';
     },
 
 

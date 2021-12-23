@@ -81,7 +81,7 @@
           <a
             href="#"
             aria-current="page"
-            class="z-10 dark:bg-gray-800  bg-indigo-50 border-indigo-500 text-indigo-600 dark:text-green-600 dark:border-green-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+            class="z-10 dark:bg-gray-800  bg-indigo-50 border-indigo-500 text-indigo-600 dark:text-indigo-500/70 dark:border-indigo-500/70 dark:border-2 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
           >
             {{ pagination.currentPage }}
           </a>
