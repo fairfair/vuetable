@@ -13,7 +13,7 @@
         <div class="overflow-hidden rounded">
           <div
             v-if="loading"
-            class="relative w-full bg-gray-200"
+            class="relative w-full bg-gray-200 dark:bg-gray-800"
           >
             <div
               style="width: 100%"
@@ -22,17 +22,17 @@
           </div>
           <div
             v-else
-            class="h-1 bg-gray-100"
+            class="h-1 bg-gray-100 dark:bg-gray-800"
           />
 
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
-            <thead class="bg-gray-50">
+          <table class="min-w-full divide-y divide-gray-200 border border-gray-200 dark:border-gray-600">
+            <thead class="bg-gray-50 dark:bg-gray-800">
               <tr>
                 <th
                   v-for="column in columns"
                   :key="column.id"
                   scope="col"
-                  class="px-6 pt-3 text-left font-medium tracking-wider uppercase text-sm"
+                  class="px-6 pt-3 text-left font-medium tracking-wider uppercase text-sm dark:text-gray-400"
                 >
                   <div
                     class="flex justify-between cursor-pointer"
@@ -95,7 +95,7 @@
                       type="text"
                       :name="column.field"
                       placeholder="Rechercher"
-                      class="py-1 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      class="py-1 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-200 dark:placeholder:text-gray-500"
                       @keyup.enter="submitSearch(column, $event.target.value)"
                     >
                   </div>
@@ -104,12 +104,12 @@
             </thead>
             <tbody
               v-if="lines.length > 0"
-              class="bg-white divide-y divide-gray-200"
+              class="bg-white divide-y divide-gray-200 dark:text-gray-400 dark:divide-gray-600"
             >
               <tr
                 v-for="line in lines"
                 :key="line.id"
-                class="hover:bg-indigo-50"
+                class="hover:bg-indigo-50 dark:bg-gray-800/95 dark:hover:bg-gray-800/90 "
                 :class="options && options.onRowClicked ? 'cursor-pointer' : ''"
                 @click="redirect(line)"
               >
@@ -126,7 +126,7 @@
                 > <!-- temporary background color class condition to prevent recent orders -->
                   <div
                     v-if="column.type === 'id'"
-                    class="text-gray-900"
+                    class="text-gray-900 dark:text-gray-400"
                   >
                     {{ line[column.field] }}
                   </div>
@@ -142,7 +142,7 @@
                     </div>
 
                     <div v-else>
-                      <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-800`">
+                      <span :class="`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-800 `">
                         {{ line[column.field] }}
                       </span>
                     </div>
@@ -150,7 +150,7 @@
 
                   <div
                     v-else-if="column.type === 'date'"
-                    class="text-gray-900"
+                    class="text-gray-900 dark:text-gray-400"
                   >
                     {{ getDate(line[column.field]) }}
                   </div>
@@ -178,7 +178,7 @@
 
                   <div
                     v-else
-                    class="text-gray-900"
+                    class="text-gray-900 dark:text-gray-400"
                   >
                     {{ line[column.field] }}
                   </div>
