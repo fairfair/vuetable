@@ -30,7 +30,7 @@
               v-for="(tab, index) in filters"
               :key="index"
               :href="tab.href"
-              :class="[tab.active ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-gray-500 dark:text-indigo-400/80' : 'bg-gray-100 text-gray-500 hover:text-gray-700 dark:bg-gray-700 dark:text-gray-400', 'px-3 py-2 font-medium text-sm rounded-md cursor-pointer']"
+              :class="[tab.active ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/80 dark:text-indigo-100' : 'bg-gray-100 text-gray-500 hover:text-gray-700 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-200', 'px-3 py-2 font-medium text-sm rounded-md cursor-pointer']"
               :aria-current="tab.active ? 'page' : undefined"
               @click="clickFilter(tab)"
             >
