@@ -25,7 +25,7 @@
             class="h-1 bg-white dark:bg-gray-800"
           />
 
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-200 dark:border-gray-600">
+          <table class="min-w-full divide-y divide-gray-200 border border-gray-200 dark:border-gray-600 dark:bg-gray-800">
             <thead class="bg-gray-50 dark:bg-gray-800">
               <tr>
                 <th
