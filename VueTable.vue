@@ -105,13 +105,18 @@
             <tbody
               v-if="lines.length > 0"
               class="bg-white dark:bg-gray-700/40 divide-y border-t dark:text-gray-400 dark:divide-gray-600 border-none"
+                :class="options && options.onRowClicked ? 'cursor-pointer' : ''"
             >
               <tr
                 v-for="line in lines"
                 :key="line.id"
                 class="hover:bg-indigo-50 dark:hover:bg-gray-800"
-                :class="options && options.onRowClicked ? 'cursor-pointer' : ''"
                 @click="redirect(line)"
+                :class="(line.work_name === 'Serrurerie') && (
+                  (parseInt(getAgeObj(line.order_created_at).days, 10) === 0) &&
+                  (parseInt(getAgeObj(line.order_created_at).hours, 10) === 0) &&
+                  (parseInt(getAgeObj(line.order_created_at).minutes, 10) < 13) 
+                  ) ?  'striped-background h-full' : null"
               >
                 <td
                   v-for="column in columns"
@@ -556,5 +561,14 @@ export default {
     opacity: 0;
   }
 }
+.striped-background {
+  background : repeating-linear-gradient(
+    45deg,
+    #a0a0a059,
+    #a0a0a059 10px,
+    #a0a0a015 10px,
+    #a0a0a015 20px
+  );
+};
 
 </style>

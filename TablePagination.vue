@@ -38,12 +38,12 @@
       <div>
         <nav
           v-if="pagination.lastPage !== 1"
-          class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px bg-white dark:bg-gray-900 divide-x divide-gray-200 dark:divide-gray-700 border border-gray-300 dark:border-gray-700"
+          class="relative inline-flex rounded-md shadow-sm -space-x-px bg-white dark:bg-gray-700 divide-x divide-gray-200 dark:divide-gray-600 border border-gray-300 dark:border-gray-600 dark:text-gray-300"
           aria-label="Pagination"
         >
           <a
             href="#"
-            class="relative inline-flex items-center px-2 py-2 rounded-l-md text-sm font-medium text-gray-500"
+            class="relative inline-flex items-center px-2 py-2 rounded-l-md text-sm font-medium"
             @click="previous(1)"
           >
             <span class="sr-only">Précédent</span>
@@ -64,7 +64,7 @@
           <a
             v-show="pagination.currentPage > 2"
             href="#"
-            class="text-gray-500 relative inline-flex items-center px-4 py-2 text-sm font-medium"
+            class="relative inline-flex items-center px-4 py-2 text-sm font-medium"
             @click="previous(2)"
           >
             {{ pagination.currentPage - 2 }}
@@ -72,7 +72,7 @@
           <a
             v-show="pagination.currentPage > 1"
             href="#"
-            class="text-gray-500 relative inline-flex items-center px-4 py-2 text-sm font-medium"
+            class="relative inline-flex items-center px-4 py-2 text-sm font-medium"
             @click="previous(1)"
           >
             {{ pagination.currentPage - 1 }}
@@ -87,7 +87,7 @@
           <a
             v-show="pagination.currentPage < pagination.lastPage"
             href="#"
-            class="text-gray-500 hidden md:inline-flex relative items-center px-4 py-2 text-sm font-medium"
+            class="hidden md:inline-flex relative items-center px-4 py-2 text-sm font-medium"
             @click="next(1)"
           >
             {{ pagination.currentPage + 1 }}
@@ -95,14 +95,14 @@
           <a
             v-show="pagination.currentPage + 1 < pagination.lastPage"
             href="#"
-            class="text-gray-500 hidden md:inline-flex relative items-center px-4 py-2 text-sm font-medium"
+            class="hidden md:inline-flex relative items-center px-4 py-2 text-sm font-medium"
             @click="next(2)"
           >
             {{ pagination.currentPage + 2 }}
           </a>
           <a
             href="#"
-            class="relative inline-flex items-center px-2 py-2 rounded-r-md text-sm font-medium text-gray-500"
+            class="relative inline-flex items-center px-2 py-2 rounded-r-md text-sm font-medium"
             @click="next(1)"
           >
             <span class="sr-only">Suivant</span>
