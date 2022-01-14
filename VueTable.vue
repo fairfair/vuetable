@@ -22,7 +22,7 @@
           </div>
           <div
             v-else
-            class="h-1 bg-white dark:bg-gray-800"
+            class="h-1 bg-gray-200 dark:bg-gray-800"
           />
 
           <table class="min-w-full divide-y divide-gray-200 border border-gray-200 dark:border-gray-600 dark:bg-gray-800">
@@ -267,8 +267,10 @@ export default {
         this.filters = JSON.parse(filters);
 
         for (const value in this.filters){
-          let column = value.split("[");
-          this.$refs[`input-${column[0]}`].value = this.filters[value];
+          let input = `input-${value.split("[")[0]}`;
+          if (this.$refs[column]) {
+            this.$refs[column].value = this.filters[value];
+          }
         }
       }
 
@@ -417,6 +419,13 @@ export default {
       this.orderBy = this.options && this.options.orderBy !== undefined ? this.options.orderBy : 'DESC';
       this.perPage = this.options && this.options.perPage !== undefined ? this.options.perPage : 20;
       this.pagination.currentPage = 1;
+
+      // reset inputs
+      for (let column of this.columns) {
+        if (this.$refs[`input-${column.field}`]) {
+          this.$refs[`input-${column.field}`].value = '';
+        }
+      }
     },
 
     redirect(line) {
