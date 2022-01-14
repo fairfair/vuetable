@@ -268,8 +268,8 @@ export default {
 
         for (const value in this.filters){
           let input = `input-${value.split("[")[0]}`;
-          if (this.$refs[column]) {
-            this.$refs[column].value = this.filters[value];
+          if (this.$refs[input]) {
+            this.$refs[input].value = this.filters[value];
           }
         }
       }
