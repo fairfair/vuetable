@@ -315,36 +315,32 @@ export default {
         });
       });
 
-       this.$http
-         .get(this.apiUrl, { params })
-         .then(res => {
-           if (savedLockVersion === this.lockVersion && res) {
-             this.lines = res.data.data;
-             this.pagination = {
-               currentPage: res.data.current_page,
-               from: res.data.from,
-               to: res.data.to,
-               total: res.data.total,
-               lastPage: res.data.last_page,
-             };
+      try {
+        const res = this.$http.get(this.apiUrl, { params });
 
-             // save params in localstorage
-             localStorage.setItem(`${this.name}-filters`, JSON.stringify(this.filters));
-             localStorage.setItem(`${this.name}-sortBy`, this.sortBy);
-             localStorage.setItem(`${this.name}-orderBy`, this.orderBy);
-             this.lockVersion = null;
+        if (savedLockVersion === this.lockVersion && res) {
+          this.lines = res.data.data;
+          this.pagination = {
+            currentPage: res.data.current_page,
+            from: res.data.from,
+            to: res.data.to,
+            total: res.data.total,
+            lastPage: res.data.last_page,
+          };
 
-           }
+          // save params in localstorage
+          localStorage.setItem(`${this.name}-filters`, JSON.stringify(this.filters));
+          localStorage.setItem(`${this.name}-sortBy`, this.sortBy);
+          localStorage.setItem(`${this.name}-orderBy`, this.orderBy);
+          this.lockVersion = null;
+        }
+      }finally {
+        this.loading = false;
 
-           this.loading = false;
-         })
-         .catch(e => {
-           this.loading = false;
-
-           if (savedLockVersion === this.lockVersion){
-             this.lockVersion = null;
-           }
-         })
+        if (savedLockVersion === this.lockVersion){
+          this.lockVersion = null;
+        }
+      }
     },
     castValue(value) {
       if (value === true) {
