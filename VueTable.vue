@@ -122,6 +122,12 @@
                   v-for="column in columns"
                   :key="column.id"
                   class="px-6 py-4 whitespace-nowrap"
+                  :class="(line.work_name === 'Serrurerie') && (
+                    (parseInt(getAgeObj(line.order_created_at).days, 10) === 0) &&
+                    (parseInt(getAgeObj(line.order_created_at).hours, 10) === 0) &&
+                    (parseInt(getAgeObj(line.order_created_at).minutes, 10) < 13)
+
+                  ) ?  'bg-gray-200 dark:bg-gray-600/60' : null"
                 > <!-- temporary background color class condition to prevent recent orders -->
                   <div
                     v-if="column.type === 'id'"
@@ -132,7 +138,7 @@
 
                   <div v-else-if="column.type === 'badge'">
                     <div v-if="column.badgeOptions">
-                      <span 
+                      <span
                         :class="[`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium`,
                         !column.badgeOptions[0].colors ? `bg-${showBadge('color', line, column)}-100 text-${showBadge('color', line, column)}-800` : `${showBadgeColors(line, column)}` ]"
                       >
@@ -249,6 +255,7 @@ export default {
         total: 0,
         lastPage: 1,
       },
+      lockVersion: null
     };
   },
   async mounted() {
@@ -256,36 +263,38 @@ export default {
     this.reset();
 
     // if localStorage : fetch it
-    if (localStorage.getItem(`${this.name}-filters`)
-      || localStorage.getItem(`${this.name}-sortBy`)
-      || localStorage.getItem(`${this.name}-orderBy`)
-    ) {
-      if (localStorage.getItem(`${this.name}-filters`)) {
-        this.filters = JSON.parse(localStorage.getItem(`${this.name}-filters`));
+    const filters = localStorage.getItem(`${this.name}-filters`);
+    const sortBy = localStorage.getItem(`${this.name}-sortBy`);
+    const orderBy = localStorage.getItem(`${this.name}-orderBy`);
+
+    if (filters || sortBy || orderBy ) {
+      if (filters) {
+        this.filters = JSON.parse(filters);
+
+        for (const value in this.filters){
+          let column = value.split("[");
+          this.$refs[`input-${column[0]}`].value = this.filters[value];
+        }
       }
 
-      if (localStorage.getItem(`${this.name}-sortBy`)) {
-        this.sortBy = localStorage.getItem(`${this.name}-sortBy`);
+      if (sortBy) {
+        this.sortBy = sortBy;
       }
 
-      if (localStorage.getItem(`${this.name}-orderBy`)) {
-        this.orderBy = localStorage.getItem(`${this.name}-orderBy`);
+      if (orderBy) {
+        this.orderBy = orderBy;
       }
     } else if (this.options.defaultFilters !== undefined) {
       this.filters = this.options.defaultFilters;
     }
 
-    await this.fetch();
+    this.fetch();
   },
-
   methods: {
-    async fetch() {
-      this.loading = true;
-
-      // save params in localstorage
-      localStorage.setItem(`${this.name}-filters`, JSON.stringify(this.filters));
-      localStorage.setItem(`${this.name}-sortBy`, this.sortBy);
-      localStorage.setItem(`${this.name}-orderBy`, this.orderBy);
+     fetch(showLoadingBar = true) {
+      this.loading = showLoadingBar;
+      let savedLockVersion = this.generateUUID();
+      this.lockVersion = savedLockVersion;
 
       const defaultParams = {
         sortBy: this.sortBy,
@@ -312,8 +321,9 @@ export default {
       });
 
       try {
-        const res = await this.$http.get(this.apiUrl, { params });
-        if (res) {
+        const res = this.$http.get(this.apiUrl, { params });
+
+        if (savedLockVersion === this.lockVersion && res) {
           this.lines = res.data.data;
           this.pagination = {
             currentPage: res.data.current_page,
@@ -322,14 +332,21 @@ export default {
             total: res.data.total,
             lastPage: res.data.last_page,
           };
+
+          // save params in localstorage
+          localStorage.setItem(`${this.name}-filters`, JSON.stringify(this.filters));
+          localStorage.setItem(`${this.name}-sortBy`, this.sortBy);
+          localStorage.setItem(`${this.name}-orderBy`, this.orderBy);
+          this.lockVersion = null;
         }
-      } catch (e) {
-        //
-      } finally {
+      }finally {
         this.loading = false;
+
+        if (savedLockVersion === this.lockVersion){
+          this.lockVersion = null;
+        }
       }
     },
-
     castValue(value) {
       if (value === true) {
         return 1;
@@ -495,6 +512,21 @@ export default {
     getDurationFromSecondsToDays(value) {
       return value / (60 * 60 * 24);
     },
+    generateUUID() {
+      let d = new Date().getTime();
+      let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        let r = Math.random() * 16;
+        if(d > 0){
+          r = (d + r)%16 | 0;
+          d = Math.floor(d/16);
+        } else {
+          r = (d2 + r)%16 | 0;
+          d2 = Math.floor(d2/16);
+        }
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+    }
   },
 };
 </script>
