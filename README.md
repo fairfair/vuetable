@@ -1,11 +1,6 @@
+[Archived] -> go to vue-components for frontend library
+
 # VueTable Component
-
-## Note 
-
-To update all submodules :
-```
-git submodule foreach git pull origin main
-```
 
 ## Requirements
 
