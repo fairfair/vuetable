@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between align-items">
+  <div class="flex justify-between align-items items-center">
     <div class="my-auto">
       <div v-if="filters.length > 0">
         <div class="sm:hidden">
@@ -23,7 +23,7 @@
         </div>
         <div class="hidden sm:block">
           <nav
-            class="flex space-x-3"
+            class="flex flex-wrap flex-start gap-2"
             aria-label="Tabs"
           >
             <a
@@ -40,45 +40,47 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-end">
-      <button
-        class="bg-red-100 p-2 mr-2 font-medium text-sm rounded-md cursor-pointer dark:bg-red-500/30 dark:text-red-500/80"
-        @click="reset"
-      >
-        <svg
-          class="w-6 h-6 text-red-500 hover:text-red-700"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+    <div>
+      <div class="flex flex-end">
+        <button
+          class="bg-red-100 p-2 mr-2 font-medium text-sm rounded-md cursor-pointer dark:bg-red-500/30 dark:text-red-500/80"
+          @click="reset"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-      <button
-        class="bg-indigo-100 p-2 font-medium text-sm rounded-md cursor-pointer dark:bg-indigo-500/20 dark:text-indigo-600/80"
-        @click="refresh"
-      >
-        <svg
-          class="w-6 h-6 text-indigo-500 hover:text-indigo-700"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+          <svg
+            class="w-6 h-6 text-red-500 hover:text-red-700"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+        <button
+          class="bg-indigo-100 p-2 font-medium text-sm rounded-md cursor-pointer dark:bg-indigo-500/20 dark:text-indigo-600/80"
+          @click="refresh"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-          />
-        </svg>
-      </button>
+          <svg
+            class="w-6 h-6 text-indigo-500 hover:text-indigo-700"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 </template>
