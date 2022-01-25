@@ -117,7 +117,7 @@
                   v-for="column in columns"
                   :key="column.id"
                   class="px-6 py-4 whitespace-nowrap"
-                  v-if="getAgeObj(line.order_created_at)"
+                  v-if="(line.order_created_at && getAgeObj(line.order_created_at)) || !line.order_created_at "
                   :class="(line.work_name === 'Serrurerie') && (
                     (parseInt(getAgeObj(line.order_created_at).days, 10) === 0) &&
                     (parseInt(getAgeObj(line.order_created_at).hours, 10) === 0) &&
