@@ -107,24 +107,23 @@
               class="bg-white dark:bg-gray-700/40 divide-y border-t dark:text-gray-400 dark:divide-gray-600 border-none"
               :class="options && options.onRowClicked ? 'cursor-pointer' : ''"
             >
-              <div v-for="line in lines">
               <tr
-                v-if="(line.order_created_at && getAgeObj(line.order_created_at)) || !line.order_created_at "
+                v-for="line in lines"
                 :key="line.id"
                 class="hover:bg-indigo-50 dark:hover:bg-gray-800"
+                :class="options && options.onRowClicked ? 'cursor-pointer' : ''"
                 @click="redirect(line)"
-                :class="(line.work_name === 'Serrurerie') && (
-                    (parseInt(getAgeObj(line.order_created_at).days, 10) === 0) &&
-                    (parseInt(getAgeObj(line.order_created_at).hours, 10) === 0) &&
-                    (parseInt(getAgeObj(line.order_created_at).minutes, 10) < 13)
-
-                  ) ?  'striped-background h-full' : null"
               >
                 <td
                   v-for="column in columns"
                   :key="column.id"
                   class="px-6 py-4 whitespace-nowrap"
-
+                  v-if="(line.order_created_at && getAgeObj(line.order_created_at)) || !line.order_created_at "
+                  :class="(line.work_name === 'Serrurerie') && (
+                    (parseInt(getAgeObj(line.order_created_at).days, 10) === 0) &&
+                    (parseInt(getAgeObj(line.order_created_at).hours, 10) === 0) &&
+                    (parseInt(getAgeObj(line.order_created_at).minutes, 10) < 13)
+                  ) ?  'bg-gray-200 dark:bg-gray-600/60' : null"
                 > <!-- temporary background color class condition to prevent recent orders -->
                   <div
                     v-if="column.type === 'id'"
@@ -186,7 +185,6 @@
                   </div>
                 </td>
               </tr>
-              </div>
             </tbody>
             <tbody v-else>
               <tr>
