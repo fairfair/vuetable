@@ -107,8 +107,9 @@
               class="bg-white dark:bg-gray-700/40 divide-y border-t dark:text-gray-400 dark:divide-gray-600 border-none"
               :class="options && options.onRowClicked ? 'cursor-pointer' : ''"
             >
+              <div v-for="line in lines">
               <tr
-                v-for="line in lines"
+                v-if="(line.order_created_at && getAgeObj(line.order_created_at)) || !line.order_created_at "
                 :key="line.id"
                 class="hover:bg-indigo-50 dark:hover:bg-gray-800"
                 @click="redirect(line)"
@@ -123,7 +124,6 @@
                   v-for="column in columns"
                   :key="column.id"
                   class="px-6 py-4 whitespace-nowrap"
-                  v-if="(line.order_created_at && getAgeObj(line.order_created_at)) || !line.order_created_at "
 
                 > <!-- temporary background color class condition to prevent recent orders -->
                   <div
@@ -186,6 +186,7 @@
                   </div>
                 </td>
               </tr>
+              </div>
             </tbody>
             <tbody v-else>
               <tr>
