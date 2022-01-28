@@ -177,6 +177,13 @@
                   </div>
 
                   <div
+                    v-else-if="column.type === 'amount'"
+                    class="text-gray-900"
+                  >
+                    {{ roundAmount('round', line[column.field], -1) }} €
+                  </div>
+
+                  <div
                     v-else
                     class="text-gray-900 dark:text-gray-400"
                   >
@@ -519,6 +526,26 @@ export default {
     },
     getDurationFromSecondsToDays(value) {
       return value / (60 * 60 * 24);
+    },
+    roundAmount(type, value, exp) {
+      if (typeof exp === 'undefined' || +exp === 0) {
+        return Math[type](value);
+      }
+      value = +value;
+      exp = +exp;
+      // Si value n'est pas un nombre
+          // ou si l'exposant n'est pas entier
+      if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+        return NaN;
+      }
+      // Décalage
+      value = value.toString().split('e');
+      value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+      // Re "calage"
+      value = value.toString().split('e');
+      value = value[0].split('-');
+      value = [ value.join('') ];
+      return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
     },
     generateUUID() {
       let d = new Date().getTime();
